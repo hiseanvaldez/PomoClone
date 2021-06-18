@@ -29,7 +29,7 @@ export default Timer = (props) => {
 
   return (
     <Text style={props.style.timer}>
-      {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+      {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
     </Text>
   );
 };
