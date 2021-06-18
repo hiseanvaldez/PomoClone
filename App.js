@@ -7,7 +7,7 @@ export default function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [isWorking, setIsWorking] = useState(true);
   const defaultWorkMinute = 25;
-  const defaultRestMinute = 5;
+  const defaultRestMinute = 1;
   const defaultSecond = 0;
   const play = require("./assets/outline_play.png");
   const pause = require("./assets/outline_pause.png");
@@ -20,7 +20,9 @@ export default function App() {
     setIsRunning(false);
   };
 
-  const resetTimer = () => {};
+  const resetTimer = () => {
+    console.log("Is Reset.");
+  };
 
   return (
     <View style={styles.container}>
@@ -32,7 +34,11 @@ export default function App() {
           initialMinute={isWorking ? defaultWorkMinute : defaultRestMinute}
           initialSeconds={defaultSecond}
           isRunning={isRunning}
+          reset={resetTimer}
         />
+        <Text style={styles.subText}>
+          {isWorking ? "Werk werk werk!" : "Rest play rest!"}
+        </Text>
       </View>
 
       <View style={styles.buttonView}>
@@ -65,6 +71,8 @@ const styles = StyleSheet.create({
   timerView: {
     flex: 3,
     justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
   },
   buttonView: {
     flex: 1,
@@ -75,6 +83,10 @@ const styles = StyleSheet.create({
   },
   timer: {
     fontSize: 120,
+    color: "#fff",
+  },
+  subText: {
+    fontSize: 60,
     color: "#fff",
   },
   mainButton: {
