@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import Timer from "./timer";
+import Timer from "./Timer";
 
 export default function App() {
   const [isRunning, setIsRunning] = useState(false);
@@ -9,6 +9,10 @@ export default function App() {
   const defaultWorkMinute = 25;
   const defaultRestMinute = 1;
   const defaultSecond = 0;
+  const [currentMinute, setCurrentMinute] = useState(
+    isWorking ? defaultWorkMinute : defaultRestMinute
+  );
+  const [currentSecond, setcurrentSecond] = useState(defaultSecond);
   const play = require("./assets/outline_play.png");
   const pause = require("./assets/outline_pause.png");
 
@@ -21,7 +25,11 @@ export default function App() {
   };
 
   const resetTimer = () => {
-    console.log("Is Reset.");
+    setIsRunning(false);
+    isWorking
+      ? setCurrentMinute(defaultWorkMinute)
+      : setCurrentMinute(defaultRestMinute);
+    setcurrentSecond(defaultSecond);
   };
 
   return (
@@ -30,11 +38,10 @@ export default function App() {
 
       <View style={styles.timerView}>
         <Timer
-          style={styles}
-          initialMinute={isWorking ? defaultWorkMinute : defaultRestMinute}
-          initialSeconds={defaultSecond}
+          initialMinute={currentMinute}
+          initialSeconds={currentSecond}
           isRunning={isRunning}
-          reset={resetTimer}
+          stopTimer={stopTimer}
         />
         <Text style={styles.subText}>
           {isWorking ? "Werk werk werk!" : "Rest play rest!"}
@@ -42,16 +49,10 @@ export default function App() {
       </View>
 
       <View style={styles.buttonView}>
-        <TouchableOpacity>
-          <Image
-            style={styles.secondaryButton}
-            source={require("./assets/outline_stop.png")}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={runTimer}>
+        <TouchableOpacity onPress={runTimer} onLongPress={resetTimer}>
           <Image style={styles.mainButton} source={isRunning ? pause : play} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={resetTimer}>
           <Image
             style={styles.secondaryButton}
             source={require("./assets/outline_replay.png")}
@@ -80,10 +81,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-  },
-  timer: {
-    fontSize: 120,
-    color: "#fff",
   },
   subText: {
     fontSize: 60,
